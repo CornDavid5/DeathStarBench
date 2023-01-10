@@ -11,7 +11,7 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
 def main():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 9090)
+  socket = TSocket.TSocket("home-timeline-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = HomeTimelineService.Client(protocol)
@@ -21,7 +21,7 @@ def main():
   user_id = 1
   start = 0
   stop = 10
-  print(client.ReadHomeTimeline(req_id, user_id, start, stop, {}))
+  client.ReadHomeTimeline(req_id, user_id, start, stop, {})
   transport.close()
 
 if __name__ == '__main__':

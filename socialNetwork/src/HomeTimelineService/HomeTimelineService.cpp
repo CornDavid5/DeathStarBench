@@ -20,10 +20,17 @@ using apache::thrift::transport::TFramedTransportFactory;
 using apache::thrift::transport::TServerSocket;
 using namespace social_network;
 
-void sigintHandler(int sig) { exit(EXIT_SUCCESS); }
+extern "C" void __gcov_dump (void);
+
+void sigintHandler(int sig) {
+  __gcov_dump();
+  exit(EXIT_SUCCESS);
+}
 
 int main(int argc, char *argv[]) {
   signal(SIGINT, sigintHandler);
+  signal(SIGTERM, sigintHandler);
+  signal(SIGKILL, sigintHandler);
   init_logger();
 
   // Command line options
@@ -111,7 +118,7 @@ int main(int argc, char *argv[]) {
           LOG(info) << "Starting the home-timeline-service server with replicated Redis support...";
           server.serve();
 
-      
+
   }
 
   else if (redis_cluster_flag || redis_cluster_config_flag) {

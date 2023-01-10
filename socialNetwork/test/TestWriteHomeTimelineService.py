@@ -1,26 +1,31 @@
-#!/usr/bin/env python
-import pika
-import json
+import sys
+sys.path.append('../gen-py')
 
-credentials = pika.PlainCredentials('guest', 'guest')
-connection = pika.BlockingConnection(
-  pika.ConnectionParameters(host='ath-8.ece.cornell.edu', credentials=credentials))
-channel = connection.channel()
+import uuid
+from social_network import HomeTimelineService
+from social_network.ttypes import ServiceException
 
-channel.queue_declare(queue='write-home-timeline', durable=True)
+from thrift import Thrift
+from thrift.transport import TSocket
+from thrift.transport import TTransport
+from thrift.protocol import TBinaryProtocol
 
+def main():
+  socket = TSocket.TSocket("home-timeline-service", 9090)
+  transport = TTransport.TFramedTransport(socket)
+  protocol = TBinaryProtocol.TBinaryProtocol(transport)
+  client = HomeTimelineService.Client(protocol)
 
-msg_json = {
-  "req_id": 1,
-  "post_id": 1,
-  "user_id": 1,
-  "timestamp": 1,
-  "user_mentions_id": [0,2,3],
-  "carrier": ""
-}
+  transport.open()
+  req_id = uuid.uuid4().int & 0x7FFFFFFFFFFFFFFF
+  user_id = 1
+  client.WriteHomeTimeline(req_id, 0, user_id, 23423423444, [0, 1], {})
+  transport.close()
 
-msg = json.dumps(msg_json)
-
-channel.basic_publish(exchange='', routing_key='write-home-timeline', body=msg)
-print(" [x] Sent 'Hello World!'")
-connection.close()
+if __name__ == '__main__':
+  try:
+    main()
+  except ServiceException as se:
+    print('%s' % se.message)
+  except Thrift.TException as tx:
+    print('%s' % tx.message)

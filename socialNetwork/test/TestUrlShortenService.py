@@ -11,17 +11,19 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
 def main():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 9090)
+  socket = TSocket.TSocket("url-shorten-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = UrlShortenService.Client(protocol)
 
   transport.open()
   req_id = uuid.uuid4().int & ( 1 << 32 )
-
   urls = ["https://url_0.com", "https://url_1.com", "https://url_2.com"]
+  urls = client.ComposeUrls(req_id, urls, {})
 
-  print(client.UploadUrls(req_id, urls, {}))
+  urls = [url.shortened_url for url in urls]
+  req_id = uuid.uuid4().int & ( 1 << 32 )
+  client.GetExtendedUrls(req_id, urls, {})
   transport.close()
 
 if __name__ == '__main__':

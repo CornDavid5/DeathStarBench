@@ -1,7 +1,15 @@
 version: "3.9"
 services:
+#   Enables resolving container hostnames from host machine
+  dns-media:
+    image: defreitas/dns-proxy-server
+    volumes:
+      - /opt/dns-proxy-server/conf:/app/conf
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/resolv.conf:/etc/resolv.conf
+
   social-graph-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: social-graph-service
     #    ports:
     #      - 10000:9090
@@ -14,6 +22,7 @@ services:
     entrypoint: SocialGraphService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   social-graph-mongodb:
     image: mongo:4.4.6
@@ -37,7 +46,7 @@ services:
     restart: always
 
   compose-post-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: compose-post-service
     #    ports:
     #      - 10001:9090
@@ -48,9 +57,10 @@ services:
     entrypoint: ComposePostService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   post-storage-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: post-storage-service
     ports:
       - 10002:9090
@@ -63,6 +73,7 @@ services:
     entrypoint: PostStorageService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   post-storage-memcached:
     image: memcached
@@ -79,7 +90,7 @@ services:
     restart: always
 
   user-timeline-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: user-timeline-service
     #    ports:
     #      - 10003:9090
@@ -92,6 +103,7 @@ services:
     entrypoint: UserTimelineService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   user-timeline-redis:
     image: redis
@@ -108,7 +120,7 @@ services:
     restart: always
 
   url-shorten-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: url-shorten-service
     #    ports:
     #      - 10004:9090
@@ -121,6 +133,7 @@ services:
         condition: service_started
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   url-shorten-memcached:
     image: memcached
@@ -137,7 +150,7 @@ services:
     restart: always
 
   user-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: user-service
     #    ports:
     #      - 10005:9090
@@ -150,6 +163,7 @@ services:
     entrypoint: UserService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   user-memcached:
     image: memcached
@@ -166,7 +180,7 @@ services:
     restart: always
 
   media-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: media-service
     #    ports:
     #      - 10006:9090
@@ -179,6 +193,7 @@ services:
     entrypoint: MediaService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   media-memcached:
     image: memcached
@@ -195,7 +210,7 @@ services:
     restart: always
 
   text-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: text-service
     #    ports:
     #      - 10007:9090
@@ -205,10 +220,11 @@ services:
         condition: service_started
     entrypoint: TextService
     volumes:
+      - ./coverage:/social-network-microservices/coverage
       - ./config:/social-network-microservices/config
 
   unique-id-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: unique-id-service
     #    ports:
     #      - 10008:9090
@@ -219,9 +235,10 @@ services:
     entrypoint: UniqueIdService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   user-mention-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: user-mention-service
     #    ports:
     #      - 10009:9090
@@ -232,9 +249,10 @@ services:
     entrypoint: UserMentionService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   home-timeline-service:
-    image: deathstarbench/social-network-microservices:latest
+    image: deathstarbench/social-network-microservices:local
     hostname: home-timeline-service
     #    ports:
     #      - 10010:9090
@@ -245,6 +263,7 @@ services:
     entrypoint: HomeTimelineService
     volumes:
       - ./config:/social-network-microservices/config
+      - ./coverage:/social-network-microservices/coverage
 
   nginx-thrift:
     image: yg397/openresty-thrift:xenial

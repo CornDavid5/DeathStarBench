@@ -20,6 +20,8 @@ using namespace social_network;
 static memcached_pool_st* memcached_client_pool;
 static mongoc_client_pool_t* mongodb_client_pool;
 
+extern "C" void __gcov_dump (void);
+
 void sigintHandler(int sig) {
   if (memcached_client_pool != nullptr) {
     memcached_pool_destroy(memcached_client_pool);
@@ -27,10 +29,15 @@ void sigintHandler(int sig) {
   if (mongodb_client_pool != nullptr) {
     mongoc_client_pool_destroy(mongodb_client_pool);
   }
+
+  __gcov_dump();
   exit(EXIT_SUCCESS);
 }
-int main(int argc, char* argv[]) {
+
+int main(int argc, char *argv[]) {
   signal(SIGINT, sigintHandler);
+  signal(SIGTERM, sigintHandler);
+  signal(SIGKILL, sigintHandler);
   init_logger();
   SetUpTracer("config/jaeger-config.yml", "url-shorten-service");
   json config_json;

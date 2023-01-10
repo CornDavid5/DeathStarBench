@@ -13,7 +13,7 @@ import random
 import string
 
 def compose_review():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 9090)
+  socket = TSocket.TSocket("compose-review-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = ComposeReviewService.Client(protocol)
@@ -23,8 +23,8 @@ def compose_review():
     req_id = random.getrandbits(63)
     unique_id = random.getrandbits(63)
     text = ''.join(random.choices(string.ascii_lowercase + string.digits, k=128))
-    user_id = random.randint(0,5)
-    movie_id = "movie_id_" + str(random.randint(0,5))
+    user_id = random.randint(1, 99)
+    movie_id = "movie_id_" + str(random.randint(1, 99))
     rating = random.randint(0, 10)
     client.UploadUniqueId(req_id, unique_id, {})
     client.UploadUserId(req_id, user_id, {})

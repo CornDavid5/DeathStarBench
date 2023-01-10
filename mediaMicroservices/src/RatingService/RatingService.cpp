@@ -14,12 +14,17 @@ using apache::thrift::transport::TFramedTransportFactory;
 using apache::thrift::protocol::TBinaryProtocolFactory;
 using namespace media_service;
 
+extern "C" void __gcov_dump (void);
+
 void sigintHandler(int sig) {
+  __gcov_dump();
   exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char *argv[]) {
   signal(SIGINT, sigintHandler);
+  signal(SIGTERM, sigintHandler);
+  signal(SIGKILL, sigintHandler);
   init_logger();
 
   SetUpTracer("config/jaeger-config.yml", "rating-service");
@@ -45,7 +50,7 @@ int main(int argc, char *argv[]) {
   TThreadedServer server (
       std::make_shared<RatingServiceProcessor>(
           std::make_shared<RatingHandler>(
-              &compose_client_pool, 
+              &compose_client_pool,
               &redis_client_pool)),
       std::make_shared<TServerSocket>("0.0.0.0", port),
       std::make_shared<TFramedTransportFactory>(),

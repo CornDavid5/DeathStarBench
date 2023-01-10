@@ -8,4 +8,8 @@ RUN cd /media-microservices \
     && make \
     && make install
 
+RUN apt-get update && apt-get install -y \
+  lcov \
+  && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /media-microservices

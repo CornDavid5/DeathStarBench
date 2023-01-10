@@ -13,13 +13,13 @@ import random
 from time import time
 
 def write_user_review():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 9090)
+  socket = TSocket.TSocket("user-review-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = UserReviewService.Client(protocol)
 
   transport.open()
-  for i in range(0, 100):
+  for i in range(1, 100):
     req_id = random.getrandbits(63)
     timestamp = int(time() * 1000)
     user_id = random.randint(0, 5)
@@ -27,19 +27,19 @@ def write_user_review():
   transport.close()
 
 def read_user_reviews():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 9090)
+  socket = TSocket.TSocket("user-review-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = UserReviewService.Client(protocol)
 
   transport.open()
-  for i in range(100):
+  for i in range(10):
     req_id = random.getrandbits(63)
-    user_id = random.randint(0, 5)
-    start = random.randint(0, 10)
-    stop = start + random.randint(1, 10)
+    user_id = random.randint(1, 5)
+    start = random.randint(0, 5)
+    stop = start + random.randint(1, 3)
 
-    print(client.ReadUserReviews(req_id, user_id, start, stop, {}))
+    client.ReadUserReviews(req_id, user_id, start, stop, {})
   transport.close()
 
 

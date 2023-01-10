@@ -15,18 +15,18 @@ import string
 from time import time
 
 def write_review():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 10007)
+  socket = TSocket.TSocket("review-storage-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = ReviewStorageService.Client(protocol)
 
   transport.open()
-  for i in range(100):
+  for i in range(1, 100):
     req_id = random.getrandbits(63)
     timestamp = int(time())
     review_id = i
-    movie_num = random.randint(0, 99)
-    user_id = random.randint(0, 99)
+    movie_num = random.randint(1, 99)
+    user_id = random.randint(1, 99)
     rating = random.randint(0, 10)
     text = ''.join(random.choices(string.ascii_lowercase + string.digits, k=256))
     movie_id = "movie_id_" + str(movie_num)
@@ -41,22 +41,21 @@ def write_review():
     review.timestamp = timestamp
 
     client.StoreReview(req_id, review, {})
-
   transport.close()
 
 def read_reviews():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 10007)
+  socket = TSocket.TSocket("review-storage-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = ReviewStorageService.Client(protocol)
 
   transport.open()
   for i in range(100):
-    req_id = random.randint(0, 99)
+    req_id = random.getrandbits(63)
     review_ids = set()
-    for j in range(10):
-      review_ids.add(random.randint(0, 99))
-    print(client.ReadReviews(req_id, review_ids, {}))
+    for j in range(5):
+      review_ids.add(random.randint(1, 99))
+    client.ReadReviews(req_id, review_ids, {})
   transport.close()
 
 if __name__ == '__main__':

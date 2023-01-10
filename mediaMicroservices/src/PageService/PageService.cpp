@@ -14,7 +14,10 @@ using apache::thrift::transport::TFramedTransportFactory;
 using apache::thrift::protocol::TBinaryProtocolFactory;
 using namespace media_service;
 
+extern "C" void __gcov_dump (void);
+
 void sigintHandler(int sig) {
+  __gcov_dump();
   exit(EXIT_SUCCESS);
 }
 

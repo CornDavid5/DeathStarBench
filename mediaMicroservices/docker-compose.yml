@@ -9,16 +9,20 @@ services:
       - /etc/resolv.conf:/etc/resolv.conf
 
   unique-id-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: unique-id-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10001:9090
     restart: always
     entrypoint: UniqueIdService
 
   movie-id-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: movie-id-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10002:9090
     restart: always
@@ -39,16 +43,20 @@ services:
     restart: always
 
   text-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: text-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10003:9090
     restart: always
     entrypoint: TextService
 
   rating-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: rating-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10004:9090
     restart: always
@@ -62,8 +70,10 @@ services:
     restart: always
 
   user-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: user-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10005:9090
     restart: always
@@ -84,8 +94,10 @@ services:
     restart: always
 
   compose-review-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: compose-review-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10006:9090
     restart: always
@@ -99,8 +111,10 @@ services:
     restart: always
 
   review-storage-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: review-storage-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10007:9090
     restart: always
@@ -121,8 +135,10 @@ services:
     restart: always
 
   user-review-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: user-review-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10008:9090
     restart: always
@@ -143,8 +159,10 @@ services:
     restart: always
 
   movie-review-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: movie-review-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10009:9090
     restart: always
@@ -177,8 +195,10 @@ services:
       - ./gen-lua:/gen-lua
 
   cast-info-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: cast-info-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10010:9090
     restart: always
@@ -199,8 +219,10 @@ services:
     restart: always
 
   plot-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: plot-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10011:9090
     restart: always
@@ -221,8 +243,10 @@ services:
     restart: always
 
   movie-info-service:
-    image: yg397/media-microservices
+    image: yg397/media-microservices:local
     hostname: movie-info-service
+    volumes:
+      - ./coverage:/media-microservices/coverage
 #    ports:
 #      - 10012:9090
     restart: always

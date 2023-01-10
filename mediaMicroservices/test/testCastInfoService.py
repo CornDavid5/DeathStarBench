@@ -12,13 +12,13 @@ from thrift.protocol import TBinaryProtocol
 
 
 def wrtie_cast_info():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 10010)
+  socket = TSocket.TSocket("cast-info-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = CastInfoService.Client(protocol)
 
   transport.open()
-  for i in range(100):
+  for i in range(1, 100):
     req_id = random.getrandbits(63)
     cast_id = i
     name = "name_" + str(i)
@@ -28,7 +28,7 @@ def wrtie_cast_info():
   transport.close()
 
 def read_cast_info():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 10010)
+  socket = TSocket.TSocket("cast-info-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = CastInfoService.Client(protocol)
@@ -37,9 +37,9 @@ def read_cast_info():
   for i in range(100):
     req_id = random.getrandbits(63)
     cast_ids = set()
-    for j in range(10):
-      cast_ids.add(random.randint(0, 99))
-    print(client.ReadCastInfo(req_id, cast_ids, {}))
+    for j in range(5):
+      cast_ids.add(random.randint(1, 99))
+      client.ReadCastInfo(req_id, cast_ids, {})
   transport.close()
 
 if __name__ == '__main__':

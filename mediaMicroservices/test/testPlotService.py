@@ -12,13 +12,13 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
 def wrtie_plot():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 10011)
+  socket = TSocket.TSocket("plot-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = PlotService.Client(protocol)
 
   transport.open()
-  for i in range(100):
+  for i in range(1, 100):
     req_id = random.getrandbits(63)
     plot_id = i
     # plot = ''.join(random.choices(string.ascii_lowercase + string.digits, k=512))
@@ -27,16 +27,16 @@ def wrtie_plot():
   transport.close()
 
 def read_plot():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 10011)
+  socket = TSocket.TSocket("plot-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = PlotService.Client(protocol)
 
   transport.open()
-  for i in range(100):
+  for i in range(10):
     req_id = random.getrandbits(63)
-    plot_id = random.randint(0, 99)
-    print(client.ReadPlot(req_id, i, {}))
+    plot_id = random.randint(1, 99)
+    client.ReadPlot(req_id, plot_id, {})
   transport.close()
 
 

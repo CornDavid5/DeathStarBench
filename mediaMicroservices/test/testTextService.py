@@ -13,7 +13,7 @@ import string
 
 def main():
     # Make socket
-    socket = TSocket.TSocket("ath-8.ece.cornell.edu", 9090)
+    socket = TSocket.TSocket("text-service", 9090)
 
     # Buffering is critical. Raw sockets are very slow
     transport = TTransport.TFramedTransport(socket)
@@ -28,10 +28,10 @@ def main():
 
 
     transport.open()
-    for i in range (1, 2):
+    for i in range (1, 100):
         req_id = random.getrandbits(64) - 2**63
         text = ''.join(random.choices(string.ascii_lowercase + string.digits, k=128))
-        client.UploadText(req_id, text)
+        client.UploadText(req_id, text, {})
 
     transport.close()
 

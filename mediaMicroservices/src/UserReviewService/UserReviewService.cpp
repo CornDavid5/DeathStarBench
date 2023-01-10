@@ -15,12 +15,17 @@ using apache::thrift::protocol::TBinaryProtocolFactory;
 using media_service::UserReviewHandler;
 using namespace media_service;
 
+extern "C" void __gcov_dump (void);
+
 void sigintHandler(int sig) {
+  __gcov_dump();
   exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char *argv[]) {
   signal(SIGINT, sigintHandler);
+  signal(SIGTERM, sigintHandler);
+  signal(SIGKILL, sigintHandler);
   init_logger();
 
   SetUpTracer("config/jaeger-config.yml", "user-review-service");

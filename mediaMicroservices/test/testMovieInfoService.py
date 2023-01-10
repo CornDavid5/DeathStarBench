@@ -13,13 +13,13 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
 def wrtie_movie_info():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 10012)
+  socket = TSocket.TSocket("movie-info-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = MovieInfoService.Client(protocol)
 
   transport.open()
-  for i in range(100):
+  for i in range(100000, 100005):
     req_id = random.getrandbits(63)
     movie_id = "movie_id_" + str(i)
     title = "movie_" + str(i)
@@ -32,27 +32,26 @@ def wrtie_movie_info():
     thumbnail_ids = []
     photo_ids = []
     video_ids = []
-    for j in range(3):
-      thumbnail_ids.append(random.getrandbits(63))
-      photo_ids.append(random.getrandbits(63))
-      video_ids.append(random.getrandbits(63))
+    # for j in range(1):
+      # thumbnail_ids.append(u'25.0')
+      # photo_ids.append(u'25.0')
+      # video_ids.append(u'25.0')
     avg_rating = random.randint(0, 10)
     num_rating = random.randint(1, 100)
-    client.WriteMovieInfo(req_id, movie_id, title, casts, plot_id, thumbnail_ids,
-      photo_ids, video_ids, avg_rating, num_rating, {})
+    client.WriteMovieInfo(req_id, movie_id, title, casts, plot_id, thumbnail_ids, photo_ids, video_ids, avg_rating, num_rating, {})
   transport.close()
 
 def read_movie_info():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 10012)
+  socket = TSocket.TSocket("movie-info-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = MovieInfoService.Client(protocol)
 
   transport.open()
-  for i in range(100):
+  for i in range(10):
     req_id = random.getrandbits(63)
-    movie_id = "movie_id_" + str(random.randint(0, 99))
-    print(client.ReadMovieInfo(req_id, movie_id, {}))
+    movie_id = "movie_id_" + str(random.randint(100000, 100004))
+    client.ReadMovieInfo(req_id, movie_id, {})
   transport.close()
 
 if __name__ == '__main__':
@@ -62,4 +61,4 @@ if __name__ == '__main__':
   except ServiceException as se:
     print('%s' % se.message)
   except Thrift.TException as tx:
-    print('%s' % tx.message)
+    print('ts %s' % tx.message)

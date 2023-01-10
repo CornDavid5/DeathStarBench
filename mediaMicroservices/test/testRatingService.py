@@ -13,7 +13,7 @@ import random
 import string
 
 def upload_rating():
-  socket = TSocket.TSocket("ath-8.ece.cornell.edu", 9090)
+  socket = TSocket.TSocket("rating-service", 9090)
   transport = TTransport.TFramedTransport(socket)
   protocol = TBinaryProtocol.TBinaryProtocol(transport)
   client = RatingService.Client(protocol)
@@ -24,7 +24,6 @@ def upload_rating():
     movie_id = "movie_id_" + str(random.randint(0, 4))
     rating = random.randint(0, 10)
     client.UploadRating(req_id, movie_id, rating, {})
-
   transport.close()
 
 
